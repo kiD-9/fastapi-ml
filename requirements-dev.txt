@@ -1,0 +1,3 @@
+# Code formatting
+black==23.3.0
+isort==5.12.0
