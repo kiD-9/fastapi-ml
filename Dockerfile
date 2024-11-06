@@ -6,8 +6,7 @@ COPY ml/ /workdir/ml/
 
 WORKDIR /workdir
 
-# Install requirements
-RUN pip install --no-cache-dir -r requirements.txt
+ADD start.sh /
+RUN chmod +x /start.sh
 
-# Run the application
-CMD ["uvicorn", "app.app:app", "--host", "127.0.0.1", "--port", "80"]
+CMD ["/start.sh"]
