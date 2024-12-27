@@ -1,6 +1,8 @@
 # ml
-torch==2.2.0
-transformers==4.38.0
+torch>=2.2.0
+torchvision>=0.20.1
+transformers>=4.38.0
+pillow>=11.0.0
 # web framework
 fastapi==0.109.1
 uvicorn==0.21.1

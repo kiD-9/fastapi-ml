@@ -3,7 +3,9 @@ from pathlib import Path
 
 import yaml
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from torchvision import transforms
+from manual_models import ResNetWithEmbeddings, EfficientNetWithEmbeddings
+from PIL import Image
 
 # load config file
 config_path = Path(__file__).parent / "config.yaml"
@@ -12,32 +14,49 @@ with open(config_path, "r") as file:
 
 
 @dataclass
-class SentimentPrediction:
+class ROPPrediction:
     """Class representing a sentiment prediction result."""
 
-    label: str
-    score: float
+    label: int
+    confidence: float
 
 
 def load_model():
-    """Load a pre-trained sentiment analysis model.
+    """Load a pre-trained ROP classification model.
 
     Returns:
         model (function): A function that takes a text input and returns a SentimentPrediction object.
     """
-    tokenizer = AutoTokenizer.from_pretrained(config["model"])
-    model = AutoModelForSequenceClassification.from_pretrained(config["model"])
-    if torch.cuda.is_available():
-        model.cuda()
 
-    def predict(text: str) -> SentimentPrediction:
-        """ Calculate sentiment of a text. `return_type` can be 'label', 'score' or 'proba' """
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if config["model"] == "efficientnet":
+        model = EfficientNetWithEmbeddings(2)
+        state = torch.load('state_models/efficientnet.pth', map_location=device)
+    elif config["model"] == "resnet18":
+        model = ResNetWithEmbeddings(2)
+        state = torch.load('state_models/resnet18.pth', map_location=device)
+    else:
+        raise ValueError(f"Unknown model: {config['model']}")
+    model.load_state_dict(state)
+    model.eval()
+
+    transform_img = transforms.Compose(
+        [
+            transforms.Resize(size=(480, 640)),
+            transforms.ToTensor(),
+        ]
+    )
+
+    def predict(img: Image.Image) -> ROPPrediction:
+        """ Calculate probability of having eye disease """
+        img = transform_img(img).unsqueeze(0)
         with torch.no_grad():
-            inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True).to(model.device)
-            proba = torch.sigmoid(model(**inputs).logits).cpu().numpy()[0]
-        return SentimentPrediction(
-            label=model.config.id2label[proba.argmax()],
-            score=proba.dot([-1, 0, 1]),
+            outputs = model(img)
+            _, predicted = torch.max(outputs, 1)
+            pred = outputs.softmax(dim=1)
+        return ROPPrediction(
+            label=predicted.item(),
+            confidence=pred[0, predicted].item(),
         )
 
     return predict
