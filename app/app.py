@@ -1,8 +1,11 @@
 from contextlib import asynccontextmanager
 from typing import Callable
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
+
+from PIL import Image
+import io
 
 from ml.model import load_model
 
@@ -22,32 +25,28 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
-class SentimentRequest(BaseModel):
-    text: str
-
-
-class SentimentResponse(BaseModel):
-    text: str
-    sentiment_label: str
-    sentiment_score: float
+class ROPResponse(BaseModel):
+    name_label: str
+    label: int
+    confidence: float
 
 
 # create a route
 @app.get("/")
 def index():
-    return {"text": "Sentiment Analysis"}
+    return {"text": "ROP prediction"}
 
 
 # Your FastAPI route handlers go here
 @app.post("/predict")
-def predict_sentiment(request: SentimentRequest):
-    sentiment = model(request.text)
+async def predict_ROP(file: UploadFile = File(...)):
+    image = Image.open(io.BytesIO(await file.read()))
+    rop_pred = model(image)
 
-    response = SentimentResponse(
-        text=request.text,
-        sentiment_label=sentiment.label,
-        sentiment_score=sentiment.score,
+    response = ROPResponse(
+        name_label = "Больной" if bool(rop_pred.label) else "Здоровый",
+        label = rop_pred.label,
+        confidence = rop_pred.confidence,
     )
 
     return response
