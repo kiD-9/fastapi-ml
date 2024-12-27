@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 import torch
 from torchvision import transforms
-from manual_models import ResNetWithEmbeddings, EfficientNetWithEmbeddings
+from .manual_models import ResNetWithEmbeddings, EfficientNetWithEmbeddings
 from PIL import Image
 
 # load config file
@@ -15,7 +15,7 @@ with open(config_path, "r") as file:
 
 @dataclass
 class ROPPrediction:
-    """Class representing a sentiment prediction result."""
+    """Class representing a ROP prediction result."""
 
     label: int
     confidence: float
@@ -25,16 +25,16 @@ def load_model():
     """Load a pre-trained ROP classification model.
 
     Returns:
-        model (function): A function that takes a text input and returns a SentimentPrediction object.
+        model (function): A function that takes a photo of the fundus and returns a disease prediction object.
     """
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if config["model"] == "efficientnet":
         model = EfficientNetWithEmbeddings(2)
-        state = torch.load('state_models/efficientnet.pth', map_location=device)
+        state = torch.load(Path(__file__).parent / 'state_models/efficientnet.pth', map_location=device)
     elif config["model"] == "resnet18":
         model = ResNetWithEmbeddings(2)
-        state = torch.load('state_models/resnet18.pth', map_location=device)
+        state = torch.load(Path(__file__).parent / 'state_models/resnet18.pth', map_location=device)
     else:
         raise ValueError(f"Unknown model: {config['model']}")
     model.load_state_dict(state)
