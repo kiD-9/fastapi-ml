@@ -1,10 +1,8 @@
 # ML web service on FastAPI
 
-This repository contains the files to build your own Machine Learning web application! 
+A web application using fastapi to analyze fundus images for retinopathy
 
-In this example we use NLP sentiment-analysis model from Hugging Face Hub. However the described code structure can be used for any machine learning problem. 
-
-## Local development
+## Run app in local
 
 ```bash
 # Create a virtual environment
