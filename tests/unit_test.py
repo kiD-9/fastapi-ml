@@ -19,7 +19,7 @@ def model():
 
 @pytest.fixture(scope="module")
 def dataset():
-    labels_path = "test/data/ROP.csv"
+    labels_path = "tests/data/ROP.csv"
     return pd.read_csv(labels_path)
 
 def test_load_model(model):
@@ -34,7 +34,7 @@ def test_predict_ROP(model, dummy_image):
 
 def test_predict_ROP_with_dataset(model, labels):
     for idx, row in labels.iterrows():
-        image = Image.open(f'test/data/{row["image_name"]}')
+        image = Image.open(f'tests/data/{row["image_name"]}')
         prediction = model(image)
         assert isinstance(prediction, ROPPrediction)
         assert prediction.label in [0, 1]
@@ -43,7 +43,7 @@ def test_predict_ROP_with_dataset(model, labels):
         assert prediction.label == row["label"]
 
 def load_test_data():
-    labels = pd.read_csv("test/data/ROP.csv")
+    labels = pd.read_csv("tests/data/ROP.csv")
     test_data = []
     for idx, row in labels.iterrows():
         test_data.append((row['image_name'], row['label']))
@@ -51,7 +51,7 @@ def load_test_data():
 
 @pytest.mark.parametrize("image_name, expected_label", load_test_data())
 def test_predict_ROP_with_dataset(model, image_name, expected_label):
-    with open("test/data/" + image_name, "rb") as image_file:
+    with open("tests/data/" + image_name, "rb") as image_file:
         image = Image.open(io.BytesIO(image_file.read()))
     prediction = model(image)
     assert isinstance(prediction, ROPPrediction)
