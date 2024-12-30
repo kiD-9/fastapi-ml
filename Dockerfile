@@ -1,12 +1,14 @@
-FROM python:3.11
-
-COPY requirements.txt requirements-dev.txt setup.py /workdir/
-COPY app/ /workdir/app/
-COPY ml/ /workdir/ml/
+FROM python:3.10
 
 WORKDIR /workdir
 
-ADD start.sh /
-RUN chmod +x /start.sh
+COPY requirements.txt setup.py /workdir/
 
-CMD ["/start.sh"]
+COPY app/ /workdir/app/
+COPY ml/ /workdir/ml/
+
+RUN pip install -U -e requirements.txt
+
+EXPOSE 80
+
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "80"]
