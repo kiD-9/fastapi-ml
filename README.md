@@ -6,7 +6,7 @@ A web application using fastapi to analyze fundus images for retinopathy
 
 ```bash
 # Create a virtual environment
-python3.11 -m venv env
+python3 -m venv env
 
 # Activate the virtual environment
 source env/bin/activate
