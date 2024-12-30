@@ -25,6 +25,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
         run: |
+          pip install flake8 pytest pytest-cov
           coverage run -m pytest tests/integration_test.py tests/unit_test.py  -v -s
       - name: Generate coverage report
         run: |
