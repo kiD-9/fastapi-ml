@@ -18,5 +18,4 @@ setup(
     packages=find_packages(exclude=["tests"]),
     python_requires=">=3.9",
     install_requires=requirements("requirements.txt"),
-    extras_require={"dev": requirements("requirements-dev.txt")},
 )
