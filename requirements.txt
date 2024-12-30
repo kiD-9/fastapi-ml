@@ -4,7 +4,11 @@ torchvision>=0.20.1
 transformers>=4.38.0
 pillow>=11.0.0
 # web framework
-fastapi==0.109.1
+fastapi>=0.109.1
 uvicorn==0.21.1
 numpy==1.26.4
 python-multipart>=0.0.20
+# for test
+pytest>=8.3.4
+pytest-asyncio>=0.25.0
+pandas>=2.2.3
