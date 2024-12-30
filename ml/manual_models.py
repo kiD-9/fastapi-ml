@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 
+
 class ResNetWithEmbeddings(nn.Module):
     def __init__(self, num_classes=10, version='resnet18'):
         super(ResNetWithEmbeddings, self).__init__()

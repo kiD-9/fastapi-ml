@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-import yaml
 import torch
-from torchvision import transforms
-from .manual_models import ResNetWithEmbeddings, EfficientNetWithEmbeddings
+import yaml
 from PIL import Image
+from torchvision import transforms
+
+from .manual_models import EfficientNetWithEmbeddings, ResNetWithEmbeddings
 
 # load config file
 config_path = Path(__file__).parent / "config.yaml"

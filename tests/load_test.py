@@ -1,6 +1,8 @@
-from locust import HttpUser, task, between
 import io
+
+from locust import HttpUser, between, task
 from PIL import Image
+
 
 class PredictionUser(HttpUser):
     wait_time = between(1, 5)  # Время ожидания между запросами

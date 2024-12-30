@@ -1,8 +1,11 @@
+import io
+
+import pandas as pd
 import pytest
 from PIL import Image
-from ml.model import load_model, ROPPrediction
-import io
-import pandas as pd
+
+from ml.model import ROPPrediction, load_model
+
 
 @pytest.fixture(scope="module")
 def dummy_image():

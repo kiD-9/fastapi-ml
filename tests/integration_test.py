@@ -1,9 +1,12 @@
+import io
+
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
+
 from app.app import app, predict_ROP
 from ml.model import load_model
-from PIL import Image
-import io
+
 
 @pytest.fixture(scope="module")
 def dummy_image():

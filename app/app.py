@@ -1,11 +1,10 @@
+import io
 from contextlib import asynccontextmanager
 from typing import Callable
 
-from fastapi import FastAPI, UploadFile, File
-from pydantic import BaseModel
-
+from fastapi import FastAPI, File, UploadFile
 from PIL import Image
-import io
+from pydantic import BaseModel
 
 from ml.model import load_model
 
