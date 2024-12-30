@@ -33,12 +33,9 @@ jobs:
       - name: Test with pytest
         run: |
           coverage run -m pytest tests/integration_test.py tests/unit_test.py  -v -s
-      - name: Generate Coverage Report
-        run: |
-          coverage report -m
       - name: Generate coverage report
         run: |
-          coverage xml
+          coverage xml -i
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
