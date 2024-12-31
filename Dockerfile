@@ -7,7 +7,7 @@ COPY requirements.txt setup.py /workdir/
 COPY app/ /workdir/app/
 COPY ml/ /workdir/ml/
 
-RUN pip install -U -e requirements.txt
+RUN pip install -U -r requirements.txt
 
 EXPOSE 8080
 
