@@ -12,7 +12,7 @@ python3 -m venv env
 source env/bin/activate
 
 # Install/upgrade dependencies
-pip install -U -e .
+pip install -U -r requirements.txt
 
 # (Optional) Code formatting
 make pretty
@@ -28,7 +28,7 @@ deactivate
 
 ```bash
 docker build -t ml-app .
-docker run -p 80:80 ml-app
+docker run -p 8080:8080 ml-app
 ```
 
 ## Run tests for the app 
@@ -37,7 +37,7 @@ Run the following commands while docker container is running (in other terminal)
 
 ```bash
 source env/bin/activate
-make test_app
+make tests
 
 deactivate
 ```
